@@ -1,5 +1,6 @@
 # User info wrapper object
 import logging
+import scrubadub
 
 class User(object):
     """
@@ -57,3 +58,19 @@ class User(object):
             if img_key in profile:
                 return profile[img_key]
         return profile[self._DEFAULT_IMAGE_KEY]
+
+class RedactedUser(User):
+    """
+    Child object to redact user information consistently
+    """
+    @property
+    def display_name(self):
+        return scrubadub.clean(super(RedactedUser, self).display_name)
+
+    @property
+    def email(self):
+        return scrubadub.clean(super(RedactedUser, self).email)
+
+    def image_url(self, pixel_size=None):
+        return ""
+
